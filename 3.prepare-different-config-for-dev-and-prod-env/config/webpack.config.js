@@ -1,4 +1,5 @@
-const path = require("path"); // Import node path module
+// Import node path module
+const path = require("path");
 
 // html-webpack-plugin generates an HTML5 file that includes
 // all webpack bundles in the <bod> using <script> tag
@@ -8,18 +9,21 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 // and injects it into HTML file by creating a <link> tag in <head> element
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+const paths = require("./paths");
+
 console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
 
 module.exports = {
   mode: "development", // "production"
-  entry: "./src/index.js", // script entry point
+  entry: paths.appIndexJs, // script entry point
   output: {
-    filename: "bundle.js", // resulting script file name
-    path: path.join(__dirname, "dist") // output folder, should be an absolute path
+    //filename: "bundle.js", // resulting script file name
+    path: paths.appBuild // output folder, should be an absolute path
   },
   devServer: {
-    contentBase: "./dist", // webpack-dev-server root
-    port: 3003 // port number
+    contentBase: paths.appBuild, // webpack-dev-server root
+    port: 3003, // port number
+    compress: true
   },
   module: {
     rules: [
@@ -51,8 +55,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: "./src/public/index.html", // source html file
-      filename: "./index.html" // resulting html file name
+      template: paths.appHtml // source html file
+      //filename: "./index.html" // resulting html file name
     }),
     new MiniCssExtractPlugin({
       filename: "main.css" // resulting stylesheet file
