@@ -1,6 +1,6 @@
 // path.js
 /**
- * Define all paths here, so we don't have to hard code paths everywhere.
+ * Define all paths here, so we don't have to hard code them everywhere.
  */
 "use strict";
 
@@ -13,5 +13,7 @@ const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 module.exports = {
   appIndexJs: resolveApp("src/index.js"),
   appBuild: resolveApp("build"),
-  appHtml: resolveApp("src/public/index.html")
+  appHtml: resolveApp("src/public/index.html"),
+  appFavIcon: resolveApp("src/image/favicon.ico"),
+  publicPath: ""
 };

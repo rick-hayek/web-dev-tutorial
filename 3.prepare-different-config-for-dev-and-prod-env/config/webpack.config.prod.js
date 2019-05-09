@@ -11,14 +11,21 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const paths = require("./paths");
 
-console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
-
 module.exports = {
-  mode: "development", // "production"
+  mode: "production",
   entry: paths.appIndexJs, // script entry point
   output: {
-    filename: "static/js/main.js", // resulting script file name
-    path: paths.appBuild // output folder, should be an absolute path
+    filename: "static/js/[name].[contenthash:8].js", // resulting script file name
+    chunkFilename: "static/js/[name].[contenthash:8].chunk.js",
+    path: paths.appBuild, // output folder, should be an absolute path
+    publicPath: paths.publicPath
+  },
+  optimization: {
+    minimize: true,
+    splitChunks: {
+      chunks: "all" // put everything from node_modules into vender.js; others go to main.js
+    }
+    //runtimeChunk: true
   },
   devServer: {
     contentBase: paths.appBuild, // webpack-dev-server root
@@ -29,21 +36,14 @@ module.exports = {
     rules: [
       {
         test: /\.(html)$/,
-        use: [{ loader: "html-loader" }]
+        use: [{ loader: "html-loader", options: { minimize: true } }]
       },
       {
         test: [/\.(css)$|\.(scss)$/],
-        //use: [{ loader: "style-loader" }, { loader: "css-loader" }] // for inline style
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: true // hmr for development env
-            }
-          },
-          "css-loader"
-          //"sass-loader"
-        ] // for external style file
+          { loader: MiniCssExtractPlugin.loader },
+          require.resolve("css-loader")
+        ]
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
@@ -51,7 +51,7 @@ module.exports = {
           {
             loader: "file-loader",
             options: {
-              name: "static/image/[name].[ext]" // Resulting image file
+              name: "static/image/[hash:16].[ext]" // Resulting image file
             }
           }
         ]
@@ -61,11 +61,11 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       template: paths.appHtml, // source html file
-      //filename: "./index.html" // resulting html file name
+      filename: "index.html", // resulting html file name
       favicon: paths.appFavIcon
     }),
     new MiniCssExtractPlugin({
-      filename: "static/style/main.css" // resulting stylesheet file
+      filename: "static/style/[contenthash:16].css" // resulting stylesheet file
     })
   ]
 };

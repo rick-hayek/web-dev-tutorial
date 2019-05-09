@@ -7,8 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --config ./config/webpack.config.js && webpack-dev-server --open --config ./config/webpack.config.js",
     "clean": "rm -rf ./dist/ && rm -rf ./build/",
-    "build": "webpack --config ./config/webpack.config.js",
-    "rebuild": "npm run clean && npm run build"
+    "build": "webpack --config ./config/webpack.config.prod.js",
+    "rebuild": "npm run clean && npm run build",
+    "prod": "npm run rebuild && webpack-dev-server --open --config ./config/webpack.config.prod.js"
   },
   "devDependencies": {
     "css-loader": "^2.1.1",
